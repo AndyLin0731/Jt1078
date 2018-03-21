@@ -197,9 +197,21 @@ class Jt808Parse2Print
 				System.arraycopy(i_cDataBuf,iTempLen,bTemp,0,12);
 				Jt808Print("时间",bTemp,12);	
 				iTempLen+=12;
-				System.arraycopy(i_cDataBuf,iTempLen,bTemp,0,(wMsgLen-28)*2);
-				Jt808Print("附加信息",bTemp,(wMsgLen-28)*2);	
-				iTempLen+=(wMsgLen-28)*2;
+				
+				for(int i=1,j=1;i<=(wMsgLen-28)*2;)
+				{
+					System.arraycopy(i_cDataBuf,iTempLen+2,bTemp,0,2);
+					strTemp=new String(bTemp,0,2);
+					int iAddIdLen=Integer.parseInt(strTemp,16);	
+					
+					System.arraycopy(i_cDataBuf,iTempLen,bTemp,0,2*2);
+					bTemp[4]=' ';
+					System.arraycopy(i_cDataBuf,iTempLen+4,bTemp,5,(iAddIdLen)*2);
+					Jt808Print("附加信息"+j,bTemp,(iAddIdLen+2)*2+1);
+					iTempLen+=(iAddIdLen+2)*2;
+					i+=(iAddIdLen+2)*2;
+					j++;
+				}
 			}
 			else
 			{
